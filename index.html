@@ -1,0 +1,106 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login and Register</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="row justify-content-center mt-5">
+      <div class="col-md-6">
+        <!-- Login Form -->
+        <div class="card login-form">
+          <div class="card-header text-center bg-dark">
+            <h4 class="text-white">Clothing Store Login</h4>
+          </div>
+          <div class="card-body">
+            <form id="loginForm">
+              <div class="form-group">
+                <label for="loginEmail">Email address</label>
+                <input type="email" class="form-control" id="loginEmail" aria-describedby="emailHelp" required />
+              </div>
+              <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" class="form-control" id="loginPassword" required />
+                <div class="form-group">
+                  <!-- Admin account? click here -->
+                  <p class="text-center">
+                    Admin account?
+                    <a href="#" class="admin"> Click here</a>
+                  </p>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">
+                Login
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="mt-3">
+          Don't have an account?
+          <a href="#" id="showRegisterForm"> Register here</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mt-5" id="registerSection" style="display: none;">
+      <div class="col-md-6">
+        <!-- Register Form -->
+        <div id="registerForm" class="card">
+          <div class="card-header">Register</div>
+          <div class="card-body">
+            <form>
+              <div class="form-group">
+                <label for="registerUsername">Username</label>
+                <input type="text" class="form-control" id="registerUsername" required />
+              </div>
+              <div class="form-group">
+                <label for="registerEmail">Email address</label>
+                <input type="email" class="form-control" id="registerEmail" aria-describedby="emailHelp" required />
+              </div>
+              <div class="form-group">
+                <label for="registerPassword">Password</label>
+                <input type="password" class="form-control" id="registerPassword" required />
+              </div>
+              <button id="registerBtn" class="btn btn-primary">
+                Register
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- <script src="index.js"></script> -->
+  <script>
+    // for testing purpose only, accept admin@gmail.com admin as admin
+    const adminEmail = 'admin@gmail.com';
+    const adminPassword = 'admin';
+
+    // Login Form
+    $('#loginForm').submit(function (e) {
+      e.preventDefault();
+      const email = $('#loginEmail').val();
+      const password = $('#loginPassword').val();
+
+      if (email === adminEmail && password === adminPassword) {
+        alert('Welcome Admin');
+
+        // go to dashboard.html
+        location.href = 'dashboard.html';
+      } else {
+        alert('Invalid email or password');
+      }
+    });
+  </script>
+</body>
+
+</html>

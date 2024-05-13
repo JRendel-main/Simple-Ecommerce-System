@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Clothing Shop - Homepage</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+    <style>
+        .header {
+            background-image: url("assets/bg.jpg");
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="#!">Clothing Store</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#!">Home</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <!-- login button -->
+                    <button class="btn btn-outline-dark me-2" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        <i class="bi-box-arrow-in-right me-1"></i>
+                        Login
+                    </button>
+                    <button class="btn btn-outline-dark cartBtn" type="submit" style="display: none;">
+                        <i class="bi-cart-fill me-1"></i>
+                        Cart
+                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                    </button>
+                    <button class="btn btn-outline-dark" id="logoutBtn" style="display: none;">
+                        Logout
+                    </button>
+                </div>
+            </div>
+    </nav>
+    <!-- Header-->
+    <header class="header py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">
+                    Shop in style with Clothing Store
+                </h1>
+                <p class="lead fw-normal text-white-50 mb-0">
+                    Shop with style and get the best clothes for you and your loved ones
+                </p>
+            </div>
+        </div>
+    </header>
+    <!-- Section-->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"
+                id="productContainer">
+                <!-- Product cards will be dynamically generated here -->
+            </div>
+        </div>
+    </section>
+    <!-- Modal for login and register -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Login or Register</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add two tabs for login and register -->
+                    <ul class="nav nav-tabs" id="loginRegisterTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="loginTab" data-bs-toggle="tab" data-bs-target="#login"
+                                type="button" role="tab" aria-controls="login" aria-selected="true">Login</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="registerTab" data-bs-toggle="tab" data-bs-target="#register"
+                                type="button" role="tab" aria-controls="register"
+                                aria-selected="false">Register</button>
+                        </li>
+                    </ul>
+
+                    <!-- Add tab panes for login and register -->
+                    <div class="tab-content" id="loginRegisterTabContent">
+                        <!-- Login tab pane -->
+                        <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="loginTab">
+                            <form id="loginForm">
+                                <div class="mb-3">
+                                    <label for="loginEmail" class="form-label">Email address</label>
+                                    <input type="email" class="form-control" id="loginEmail" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="loginPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="loginPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-success btn-block">Login</button>
+                            </form>
+                        </div>
+
+                        <!-- Register tab pane -->
+                        <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="registerTab">
+                            <form id="registerForm">
+                                <div class="mb-3">
+                                    <label for="registerFullName" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="registerFullName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerEmail" class="form-label">Email address</label>
+                                    <input type="email" class="form-control" id="registerEmail" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="registerPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-success btn-block">Register</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script>
+            // Function to generate a random placeholder image URL
+            function getRandomImageURL() {
+                var imageWidth = 450;
+                var imageHeight = 300;
+                var imageUrl = `https://dummyimage.com/${imageWidth}x${imageHeight}/dee2e6/6c757d.jpg`;
+                return imageUrl;
+            }
+
+            // Function to display products
+            function displayProducts() {
+                // Retrieve products from local storage
+                var products = JSON.parse(localStorage.getItem("products")) || [];
+
+                // Get the product container
+                var productContainer = $("#productContainer");
+
+                // Clear existing content
+                productContainer.empty();
+
+                // Loop through products and generate HTML for each product card
+                products.forEach(function (product) {
+                    // Generate random placeholder image URL
+                    var imageURL = getRandomImageURL();
+
+                    // convert the product price to money format
+                    product.price = parseFloat(product.price).toFixed(2);
+
+                    // Create product card HTML
+                    var productCardHTML = `
+                <div class="col mb-5">
+                    <div class="card h-100">
+                    <img class="card-img-top" src="${imageURL}" alt="Placeholder" />
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                        <h5 class="fw-bolder">${product.type}</h5>
+                        ₱${product.price}
+                        </div>
+                    </div>
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center">
+                        <button class="addToCartBtn btn btn-outline-success mt-auto" data-product-id="${product.id}">
+                            <i class="bi-cart-fill me-1"></i>
+                            Add to cart
+                        </button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                `;
+
+                    // Append product card HTML to the product container
+                    productContainer.append(productCardHTML);
+                });
+            }
+
+            function updateCartBadge() {
+                // Retrieve cart items from local storage
+                var cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+
+                // Get the cart button and badge
+                var cartBtn = $(".cartBtn");
+                var cartBadge = cartBtn.find(".badge");
+
+                // Calculate the total quantity of items in the cart
+                var totalQuantity = cartItems.reduce(function (total, item) {
+                    return total + item.quantity;
+                }, 0);
+
+                // Update the badge text
+                cartBadge.text(totalQuantity);
+            }
+
+            // Call the displayProducts function when the page loads
+            $(document).ready(function () {
+                displayProducts();
+
+                // Simple authentication
+                var isLoggedIn = false;
+
+                // Check if the user is logged in and update UI accordingly
+                function updateUI() {
+                    if (isLoggedIn) {
+                        // User is logged in, show logout button and cart button
+                        $("#loginBtn").hide();
+                        $("#logoutBtn").show();
+                        $(".cartBtn").show();
+                    } else {
+                        // User is logged out, show login button and hide cart button
+                        $("#loginBtn").show();
+                        $("#logoutBtn").hide();
+                        $(".cartBtn").hide();
+                    }
+                }
+
+                $("#registerForm").submit(function (event) {
+                    event.preventDefault();
+                    var fullName = $("#registerFullName").val();
+                    var email = $("#registerEmail").val();
+                    var password = $("#registerPassword").val();
+
+                    // Check if email already exists in localStorage
+                    var users = JSON.parse(localStorage.getItem("users")) || [];
+                    var existingUser = users.find(function (user) {
+                        return user.email === email;
+                    });
+
+                    if (existingUser) {
+                        alert("Email already registered. Please use a different email.");
+                        return;
+                    }
+
+                    // Add the new user to the list of users
+                    var newUser = { fullName: fullName, email: email, password: password };
+                    users.push(newUser);
+                    localStorage.setItem("users", JSON.stringify(users));
+
+                    alert("Registration successful! Please log in to continue.");
+                    $("#registerFullName, #registerEmail, #registerPassword").val(""); // Clear the registration form fields
+                });
+
+                // Login form submission handler
+                $("#loginForm").submit(function (event) {
+                    event.preventDefault();
+                    var email = $("#loginEmail").val();
+                    var password = $("#loginPassword").val();
+
+                    // Check if email and password match any user in localStorage
+                    var users = JSON.parse(localStorage.getItem("users")) || [];
+                    var loggedInUser = users.find(function (user) {
+                        return user.email === email && user.password === password;
+                    });
+
+                    if (loggedInUser) {
+                        isLoggedIn = true;
+                        updateUI(); // Update UI after successful login
+                        $("#loginModal").modal("hide"); // Hide the login modal
+                        alert("Login successful!");
+                    } else {
+                        alert("Invalid email or password. Please try again.");
+                    }
+                });
+
+                // Logout button click handler
+                $("#logoutBtn").click(function () {
+                    isLoggedIn = false;
+                    updateUI(); // Update UI after logout
+                    alert("Logout successful!");
+                });
+
+                // Function to handle adding products to the cart
+                function addToCart(productId) {
+                    if (!isLoggedIn) {
+                        alert("Please log in to add products to the cart.");
+                        return;
+                    }
+
+                    // Retrieve cart items from local storage
+                    var cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+
+                    // Check if the product is already in the cart
+                    var existingCartItem = cartItems.find(function (item) {
+                        return item.id === productId;
+                    });
+
+                    if (existingCartItem) {
+                        // If the product is already in the cart, increment the quantity
+                        existingCartItem.quantity++;
+                    } else {
+                        // If the product is not in the cart, add it with a quantity of 1
+                        cartItems.push({ id: productId, quantity: 1 });
+                    }
+
+                    // Save the updated cart items back to local storage
+                    localStorage.setItem("cart", JSON.stringify(cartItems));
+
+                    alert("Product added to cart!");
+                    updateCartBadge(); // Update the cart badge in the UI
+                }
+
+                // Update the "Add to cart" button click event to call the addToCart function
+                $(".addToCartBtn").click(function (event) {
+                    event.preventDefault();
+                    var productId = $(this).data("product-id");
+                    addToCart(productId);
+                });
+
+                // Cart button click handler
+                $(".cartBtn").click(function () {
+                    // Retrieve cart items from local storage
+                    var cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+
+                    // Display prompt with cart items, display the name and quantity of each item
+                    var cartMessage = cartItems.map(function (item) {
+                        var product = JSON.parse(localStorage.getItem("products")).find(function (product) {
+                            return product.id === item.id;
+                        });
+                        return `${product.type} x ${item.quantity}`;
+                    }).join("\n");
+
+
+
+                    // Display the cart items in a prompt
+                    var confirmation = confirm(`Cart items:\n${cartMessage}\n\nProceed to checkout?`);
+
+                    if (confirmation) {
+
+                        // compute the total amount
+                        var totalAmount = cartItems.reduce(function (total, item) {
+                            var product = JSON.parse(localStorage.getItem("products")).find(function (product) {
+                                return product.id === item.id;
+                            });
+                            return total + product.price * item.quantity;
+                        }, 0);
+
+                        // Display the total amount in a prompt
+                        var paymentConfirmation = confirm(`Total amount: ₱${totalAmount.toFixed(2)}\n\nProceed with payment?`);
+
+                        if (paymentConfirmation) {
+                            // ask for payment shipping address and contact number
+                            var shippingAddress = prompt("Enter shipping address:");
+                            var contactNumber = prompt("Enter contact number:");
+
+                            // Display the payment confirmation
+                            alert(`Payment successful! Your order will be shipped to ${shippingAddress}. We will contact you at ${contactNumber} for confirmation.`);
+
+                            // save to order history
+                            var orderHistory = JSON.parse(localStorage.getItem("orderHistory")) || [];
+                            orderHistory.push({ items: cartItems, totalAmount: totalAmount, shippingAddress: shippingAddress, contactNumber: contactNumber });
+                            localStorage.setItem("orderHistory", JSON.stringify(orderHistory));
+
+                            // Clear the cart
+                            localStorage.removeItem("cart");
+                            updateCartBadge(); // Update the cart badge in the UI
+
+                        } else {
+                            alert("Payment cancelled.");
+                        }
+                    } else {
+                        alert("Payment cancelled.");
+                    }
+                });
+
+                // Call updateUI function to initialize UI state
+                updateUI();
+            });
+        </script>
+</body>
+
+</html>
