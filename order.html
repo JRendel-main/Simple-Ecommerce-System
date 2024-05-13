@@ -228,8 +228,6 @@
 
     <script>
         function displayOrders() {
-            console.log("Displaying orders...");
-            // Retrieve orders from local storage
             var orders = JSON.parse(localStorage.getItem("orderHistory")) || [];
 
             // Get the table body
@@ -249,20 +247,20 @@
 
                 // Create table row HTML
                 var rowHTML = `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${itemsOrdered}</td>
-                        <td>${order.totalAmount}</td>
-                        <td>${order.shippingAddress}</td>
-                        <td>${order.contactNumber}</td>
-                        <td>
-                            <button class="btn btn-sm btn-success deleteOrderBtn" data-index="${index}">
-                                Mark as Shipped
-                                <i class="fas fa-check"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    `;
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${itemsOrdered}</td>
+                    <td>${order.totalAmount}</td>
+                    <td>${order.shippingAddress}</td>
+                    <td>${order.contactNumber}</td>
+                    <td>
+                        <button class="btn btn-sm btn-success markShippedBtn" data-index="${index}">
+                            Mark as Shipped
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </td>
+                </tr>
+                `;
 
                 // Append row HTML to the table body
                 tableBody.append(rowHTML);
@@ -272,28 +270,25 @@
         // Call the displayOrders function when the page loads
         displayOrders();
 
-        // Function to delete an order
-        function deleteOrder(index) {
-            // Retrieve orders from local storage
-            var orders = JSON.parse(localStorage.getItem("orders")) || [];
+        // Function to mark an order as shipped
+        function markAsShipped(index) {
 
-            // Remove the order at the specified index
+            // delete the order from the local storage
+            var orders = JSON.parse(localStorage.getItem("orderHistory")) || [];
             orders.splice(index, 1);
-
-            // Update orders in local storage
             localStorage.setItem("orderHistory", JSON.stringify(orders));
 
             // Display updated orders
             displayOrders();
         }
 
-        // Event listener for the "Shipped" button click
-        $(document).on("click", ".deleteOrderBtn", function () {
+        // Event listener for the "Mark as Shipped" button click
+        $(document).on("click", ".markShippedBtn", function () {
             var index = $(this).data("index");
             var confirmation = confirm("Are you sure you want to mark this order as shipped?");
             if (confirmation) {
-                deleteOrder(index);
-                alert("Order marked as shipped and deleted successfully.");
+                markAsShipped(index);
+                alert("Order marked as shipped successfully.");
             }
         });
     </script>
