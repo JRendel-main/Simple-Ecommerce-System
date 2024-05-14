@@ -201,7 +201,6 @@
                                 <th>Type</th>
                                 <th>Brand Name</th>
                                 <th>Price</th>
-                                <th>Stock</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -234,10 +233,6 @@
                         <div class="mb-3">
                             <label for="price" class="form-label">Price</label>
                             <input type="number" class="form-control" id="price" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="stock" class="form-label">Stock</label>
-                            <input type="number" class="form-control" id="stock" required>
                         </div>
                         <div class="mb-3">
                             <label for="imageUrl" class="form-label">Image URL</label>
@@ -277,10 +272,6 @@
                             <input type="number" class="form-control" id="editPrice" required>
                         </div>
                         <div class="mb-3">
-                            <label for="editStock" class="form-label">Stock</label>
-                            <input type="number" class="form-control" id="editStock" required>
-                        </div>
-                        <div class="mb-3">
                             <label for="editImageUrl" class="form-label">Image URL</label>
                             <input type="url" class="form-control" id="editImageUrl" required>
                         </div>
@@ -318,7 +309,6 @@
                 var productType = $("#productType").val();
                 var brandName = $("#brandName").val();
                 var price = $("#price").val();
-                var stock = $("#stock").val();
                 var imageUrl = $("#imageUrl").val(); // Extract image URL
 
                 // Create product object with a unique ID
@@ -327,7 +317,6 @@
                     type: productType,
                     brand: brandName,
                     price: price,
-                    stock: stock,
                     imageUrl: imageUrl // Add image URL to the product object
                 };
 
@@ -349,7 +338,6 @@
                 var productType = $("#editProductType").val();
                 var brandName = $("#editBrandName").val();
                 var price = $("#editPrice").val();
-                var stock = $("#editStock").val();
                 var imageUrl = $("#editImageUrl").val(); // Extract image URL
 
                 // Update product object
@@ -361,7 +349,6 @@
                     editedProduct.type = productType;
                     editedProduct.brand = brandName;
                     editedProduct.price = price;
-                    editedProduct.stock = stock;
                     editedProduct.imageUrl = imageUrl; // Update image URL
 
                     // Update local storage
@@ -400,7 +387,6 @@
                 $("#editProductType").val(product.type);
                 $("#editBrandName").val(product.brand);
                 $("#editPrice").val(product.price);
-                $("#editStock").val(product.stock);
                 $("#editProductModal").modal("show");
             });
 
@@ -417,7 +403,6 @@
                         "<td>" + product.type + "</td>" +
                         "<td>" + product.brand + "</td>" +
                         "<td>" + "₱" + product.price + "</td>" +
-                        "<td>" + "x" + product.stock + "</td>" +
                         "<td>" +
                         "<button class='btn btn-danger'>Delete</button> " +
                         "<button class='btn btn-primary btn-edit'>Edit</button>" +
