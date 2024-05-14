@@ -210,7 +210,40 @@
 
                         </tbody>
                     </table>
+                </div>
             </main>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editUserForm">
+                        <div class="form-group">
+                            <label for="editFullName">Full Name</label>
+                            <input type="text" class="form-control" id="editFullName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editEmail">Email</label>
+                            <input type="email" class="form-control" id="editEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editPassword">Password</label>
+                            <input type="password" class="form-control" id="editPassword" required>
+                        </div>
+                        <input type="hidden" id="editUserIndex">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -240,17 +273,20 @@
                 users.forEach(function (user, index) {
                     // Create table row HTML
                     var rowHTML = `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${user.fullName}</td>
-                        <td>${user.email}</td>
-                        <td>
-                            <button class="btn btn-sm btn-danger deleteUserBtn" data-index="${index}">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                    `;
+            <tr>
+                <td>${index + 1}</td>
+                <td>${user.fullName}</td>
+                <td>${user.email}</td>
+                <td>
+                    <button class="btn btn-sm btn-danger deleteUserBtn" data-index="${index}">
+                        Delete
+                    </button>
+                    <button class="btn btn-sm btn-primary editUserBtn" data-index="${index}" data-toggle="modal" data-target="#editUserModal">
+                        Edit
+                    </button>
+                </td>
+            </tr>
+            `;
 
                     // Append row HTML to the table body
                     tableBody.append(rowHTML);
@@ -284,11 +320,46 @@
                     alert("User deleted successfully.");
                 }
             });
+
+            // Event listener for the "Edit" button click
+            $(document).on("click", ".editUserBtn", function () {
+                var index = $(this).data("index");
+                var users = JSON.parse(localStorage.getItem("users")) || [];
+                var user = users[index];
+
+                // Populate the form fields with the existing user data
+                $("#editFullName").val(user.fullName);
+                $("#editEmail").val(user.email);
+                $("#editPassword").val(user.password);  // Assuming password is stored
+                $("#editUserIndex").val(index);
+            });
+
+            // Handle form submission for editing a user
+            $("#editUserForm").on("submit", function (event) {
+                event.preventDefault();
+
+                var index = $("#editUserIndex").val();
+                var users = JSON.parse(localStorage.getItem("users")) || [];
+
+                // Update the user data
+                users[index].fullName = $("#editFullName").val();
+                users[index].email = $("#editEmail").val();
+                users[index].password = $("#editPassword").val();  // Update password
+
+                // Save the updated users back to local storage
+                localStorage.setItem("users", JSON.stringify(users));
+
+                // Display updated user lists
+                displayUserLists();
+
+                // Hide the modal
+                $("#editUserModal").modal('hide');
+
+                alert("User details updated successfully.");
+            });
         });
+
     </script>
-
-
-
 </body>
 
 </html>
