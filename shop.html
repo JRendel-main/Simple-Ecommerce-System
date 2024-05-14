@@ -173,26 +173,27 @@
 
                     // Create product card HTML
                     var productCardHTML = `
-                <div class="col mb-5">
-                    <div class="card h-100">
-                    <img class="card-img-top" src="${product.imageUrl}" alt="Placeholder" />
-                    <div class="card-body p-4">
-                        <div class="text-center">
-                        <h5 class="fw-bolder">${product.type}</h5>
-                        ₱${product.price}
+                        <div class="col mb-5">
+                            <div class="card h-100">
+                            <img class="card-img-top" src="${product.imageUrl}" alt="Placeholder" />
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <span class="badge bg-dark text-white mb-2">${product.type}</span>
+                                <h5 class="fw-bolder">${product.brand}</h5>
+                                ₱${product.price}
+                                </div>
+                            </div>
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center">
+                                <button class="addToCartBtn btn btn-outline-success mt-auto" data-product-id="${product.id}">
+                                    <i class="bi-cart-fill me-1"></i>
+                                    Add to cart
+                                </button>
+                                </div>
+                            </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center">
-                        <button class="addToCartBtn btn btn-outline-success mt-auto" data-product-id="${product.id}">
-                            <i class="bi-cart-fill me-1"></i>
-                            Add to cart
-                        </button>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                `;
+                        `;
 
                     // Append product card HTML to the product container
                     productContainer.append(productCardHTML);
@@ -335,6 +336,12 @@
                     // Retrieve cart items from local storage
                     var cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 
+                    // Check if the cart is empty
+                    if (cartItems.length === 0) {
+                        alert("Your cart is empty. Please add some items before proceeding to checkout.");
+                        return;
+                    }
+
                     // Display prompt with cart items, display the name and quantity of each item
                     var cartMessage = cartItems.map(function (item) {
                         var product = JSON.parse(localStorage.getItem("products")).find(function (product) {
@@ -343,13 +350,10 @@
                         return `${product.type} x ${item.quantity}`;
                     }).join("\n");
 
-
-
                     // Display the cart items in a prompt
                     var confirmation = confirm(`Cart items:\n${cartMessage}\n\nProceed to checkout?`);
 
                     if (confirmation) {
-
                         // compute the total amount
                         var totalAmount = cartItems.reduce(function (total, item) {
                             var product = JSON.parse(localStorage.getItem("products")).find(function (product) {
@@ -365,6 +369,11 @@
                             // ask for payment shipping address and contact number
                             var shippingAddress = prompt("Enter shipping address:");
                             var contactNumber = prompt("Enter contact number:");
+
+                            if (!shippingAddress || !contactNumber) {
+                                alert("Please enter a valid shipping address and contact number.");
+                                return;
+                            }
 
                             // Display the payment confirmation
                             alert(`Payment successful! Your order will be shipped to ${shippingAddress}. We will contact you at ${contactNumber} for confirmation.`);
@@ -385,7 +394,6 @@
                         alert("Payment cancelled.");
                     }
                 });
-
                 // Call updateUI function to initialize UI state
                 updateUI();
             });
