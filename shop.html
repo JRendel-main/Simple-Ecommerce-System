@@ -22,6 +22,42 @@
             background-size: cover;
             background-position: center;
         }
+
+        .image-container {
+            position: relative;
+            overflow: hidden;
+            transition: filter 0.3s ease;
+            /* Add transition for the filter property */
+        }
+
+        .image-container:hover .description {
+            display: block;
+        }
+
+        .image-container:hover img {
+            filter: brightness(50%);
+        }
+
+        .description {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            display: none;
+            padding: 20px;
+            transition: opacity 0.3s ease;
+            /* Add transition for opacity property */
+            opacity: 0;
+            /* Start with opacity 0 */
+        }
+
+        .image-container:hover .description {
+            opacity: 1;
+            /* Change opacity to 1 on hover */
+        }
     </style>
 </head>
 
@@ -219,27 +255,30 @@
                     product.price = parseFloat(product.price).toFixed(2);
 
                     var productCardHTML = `
-            <div class="col mb-5">
-                <div class="card h-100">
-                    <img class="card-img-top" src="${product.imageUrl}" alt="Placeholder" />
-                    <div class="card-body p-4">
-                        <div class="text-center">
-                            <span class="badge bg-dark text-white mb-2">${product.type}</span>
-                            <h5 class="fw-bolder">${product.brand}</h5>
-                            ₱${product.price}
-                        </div>
-                    </div>
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center">
-                            <button class="addToCartBtn btn btn-outline-success mt-auto" data-product-id="${product.id}">
-                                <i class="bi-cart-fill me-1"></i>
-                                Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
+                            <div class="col mb-5">
+                                <div class="card h-100">
+                                    <div class="image-container">
+                                        <img class="card-img-top" src="${product.imageUrl}" alt="Placeholder" />
+                                        <div class="description">${product.description}</div>
+                                    </div>
+                                    <div class="card-body p-4">
+                                        <div class="text-center">
+                                            <span class="badge bg-dark text-white mb-2">${product.type}</span>
+                                            <h5 class="fw-bolder">${product.brand}</h5>
+                                            ₱${product.price}
+                                        </div>
+                                    </div>
+                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                        <div class="text-center">
+                                            <button class="addToCartBtn btn btn-outline-success mt-auto" data-product-id="${product.id}">
+                                                <i class="bi-cart-fill me-1"></i>
+                                                Add to cart
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
                     productContainer.append(productCardHTML);
                 });
             }

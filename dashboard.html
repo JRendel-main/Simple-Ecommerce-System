@@ -256,6 +256,11 @@
                             <input type="number" class="form-control" id="price" required>
                         </div>
                         <div class="mb-3">
+                            <!-- Product description -->
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
                             <label for="imageUrl" class="form-label">Image URL</label>
                             <input type="url" class="form-control" id="imageUrl" required>
                         </div>
@@ -291,6 +296,11 @@
                         <div class="mb-3">
                             <label for="editPrice" class="form-label">Price</label>
                             <input type="number" class="form-control" id="editPrice" required>
+                        </div>
+                        <div class="mb-3">
+                            <!-- Product description -->
+                            <label for="editDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="editDescription" rows="3" required></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="editImageUrl" class="form-label">Image URL</label>
@@ -330,6 +340,7 @@
                 var productType = $("#productType").val();
                 var brandName = $("#brandName").val();
                 var price = $("#price").val();
+                var description = $("#description").val();
                 var imageUrl = $("#imageUrl").val(); // Extract image URL
 
                 // Create product object with a unique ID
@@ -338,6 +349,7 @@
                     type: productType,
                     brand: brandName,
                     price: price,
+                    description: description,
                     imageUrl: imageUrl // Add image URL to the product object
                 };
 
@@ -359,6 +371,7 @@
                 var productType = $("#editProductType").val();
                 var brandName = $("#editBrandName").val();
                 var price = $("#editPrice").val();
+                var description = $("#editDescription").val();
                 var imageUrl = $("#editImageUrl").val(); // Extract image URL
 
                 // Update product object
@@ -370,6 +383,7 @@
                     editedProduct.type = productType;
                     editedProduct.brand = brandName;
                     editedProduct.price = price;
+                    editedProduct.description = description;
                     editedProduct.imageUrl = imageUrl; // Update image URL
 
                     // Update local storage
@@ -408,6 +422,7 @@
                 $("#editProductType").val(product.type);
                 $("#editBrandName").val(product.brand);
                 $("#editPrice").val(product.price);
+                $("#editDescription").val(product.description);
                 $("#editProductModal").modal("show");
             });
 
@@ -423,6 +438,7 @@
                     "<p><strong>Type:</strong> " + product.type + "</p>" +
                     "<p><strong>Brand Name:</strong> " + product.brand + "</p>" +
                     "<p><strong>Price:</strong> ₱" + product.price + "</p>" +
+                    "<p><strong>Description:</strong> " + product.description + "</p>" +
                     "<img src='" + product.imageUrl + "' alt='Product Image' style='max-width: 100%;'>";
 
                 // Insert product details into the modal body
