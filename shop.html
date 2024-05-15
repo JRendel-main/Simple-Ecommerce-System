@@ -11,6 +11,9 @@
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <!-- Bootstrap icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet" />
     <style>
@@ -44,10 +47,12 @@
                         <i class="bi-box-arrow-in-right me-1"></i>
                         Login
                     </button>
-                    <button class="btn btn-outline-dark cartBtn" type="submit" style="display: none;">
+                    <!-- cart button opns a modal-->
+                    <button class="cartBtn btn btn-outline-dark me-2" data-bs-toggle="modal"
+                        data-bs-target="#cartModal">
                         <i class="bi-cart-fill me-1"></i>
                         Cart
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                        <span class="badge bg-dark text-white">0</span>
                     </button>
                     <button class="btn btn-outline-dark" id="logoutBtn" style="display: none;">
                         Logout
@@ -77,6 +82,26 @@
             </div>
         </div>
     </section>
+
+    <!-- Modal for cart items -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Your Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Cart items will be dynamically generated here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success checkout">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal for login and register -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -139,263 +164,245 @@
             </div>
         </div>
 
+
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
         <!-- Core theme JS-->
         <script>
             // Function to generate a random placeholder image URL
             function getRandomImageURL() {
                 var imageWidth = 450;
                 var imageHeight = 300;
-                var imageUrl = `https://dummyimage.com/${imageWidth}x${imageHeight}/dee2e6/6c757d.jpg`;
-                return imageUrl;
+                return `https://dummyimage.com/${imageWidth}x${imageHeight}/dee2e6/6c757d.jpg`;
             }
 
             // Function to display products
             function displayProducts() {
-                // Retrieve products from local storage
                 var products = JSON.parse(localStorage.getItem("products")) || [];
+                var productContainer = $("#productContainer").empty();
 
-                // Get the product container
-                var productContainer = $("#productContainer");
-
-                // Clear existing content
-                productContainer.empty();
-
-                // Loop through products and generate HTML for each product card
                 products.forEach(function (product) {
-                    // Generate random placeholder image URL
                     var imageURL = getRandomImageURL();
-
-                    // convert the product price to money format
                     product.price = parseFloat(product.price).toFixed(2);
 
-                    // Create product card HTML
                     var productCardHTML = `
-                        <div class="col mb-5">
-                            <div class="card h-100">
-                            <img class="card-img-top" src="${product.imageUrl}" alt="Placeholder" />
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <span class="badge bg-dark text-white mb-2">${product.type}</span>
-                                <h5 class="fw-bolder">${product.brand}</h5>
-                                ₱${product.price}
-                                </div>
-                            </div>
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center">
-                                <button class="addToCartBtn btn btn-outline-success mt-auto" data-product-id="${product.id}">
-                                    <i class="bi-cart-fill me-1"></i>
-                                    Add to cart
-                                </button>
-                                </div>
-                            </div>
-                            </div>
+            <div class="col mb-5">
+                <div class="card h-100">
+                    <img class="card-img-top" src="${product.imageUrl}" alt="Placeholder" />
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <span class="badge bg-dark text-white mb-2">${product.type}</span>
+                            <h5 class="fw-bolder">${product.brand}</h5>
+                            ₱${product.price}
                         </div>
-                        `;
-
-                    // Append product card HTML to the product container
+                    </div>
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center">
+                            <button class="addToCartBtn btn btn-outline-success mt-auto" data-product-id="${product.id}">
+                                <i class="bi-cart-fill me-1"></i>
+                                Add to cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
                     productContainer.append(productCardHTML);
                 });
             }
 
+            // Function to update cart badge
             function updateCartBadge() {
-                // Retrieve cart items from local storage
                 var cartItems = JSON.parse(localStorage.getItem("cart")) || [];
-
-                // Get the cart button and badge
-                var cartBtn = $(".cartBtn");
-                var cartBadge = cartBtn.find(".badge");
-
-                // Calculate the total quantity of items in the cart
-                var totalQuantity = cartItems.reduce(function (total, item) {
-                    return total + item.quantity;
-                }, 0);
-
-                // Update the badge text
-                cartBadge.text(totalQuantity);
+                var totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+                $(".cartBtn .badge").text(totalQuantity);
             }
 
-            // Call the displayProducts function when the page loads
             $(document).ready(function () {
                 displayProducts();
-
-                // Simple authentication
                 var isLoggedIn = false;
 
-                // Check if the user is logged in and update UI accordingly
                 function updateUI() {
-                    if (isLoggedIn) {
-                        // User is logged in, show logout button and cart button
-                        $("#loginBtn").hide();
-                        $("#logoutBtn").show();
-                        $(".cartBtn").show();
-                    } else {
-                        // User is logged out, show login button and hide cart button
-                        $("#loginBtn").show();
-                        $("#logoutBtn").hide();
-                        $(".cartBtn").hide();
-                    }
+                    var cartBtn = $(".cartBtn");
+                    cartBtn.toggle(isLoggedIn);
+                    $("#loginBtn").toggle(!isLoggedIn);
+                    $("#logoutBtn").toggle(isLoggedIn);
                 }
 
                 $("#registerForm").submit(function (event) {
                     event.preventDefault();
-                    var fullName = $("#registerFullName").val();
-                    var email = $("#registerEmail").val();
-                    var password = $("#registerPassword").val();
-
-                    // Check if email already exists in localStorage
                     var users = JSON.parse(localStorage.getItem("users")) || [];
-                    var existingUser = users.find(function (user) {
-                        return user.email === email;
-                    });
+                    var email = $("#registerEmail").val();
+                    var existingUser = users.find(user => user.email === email);
 
                     if (existingUser) {
                         alert("Email already registered. Please use a different email.");
                         return;
                     }
-
-                    // Add the new user to the list of users
-                    var newUser = { fullName: fullName, email: email, password: password };
+                    var newUser = {
+                        fullName: $("#registerFullName").val(),
+                        email: email,
+                        password: $("#registerPassword").val()
+                    };
                     users.push(newUser);
                     localStorage.setItem("users", JSON.stringify(users));
-
                     alert("Registration successful! Please log in to continue.");
-                    $("#registerFullName, #registerEmail, #registerPassword").val(""); // Clear the registration form fields
+                    $(this).trigger("reset");
                 });
 
-                // Login form submission handler
                 $("#loginForm").submit(function (event) {
                     event.preventDefault();
+                    var users = JSON.parse(localStorage.getItem("users")) || [];
                     var email = $("#loginEmail").val();
                     var password = $("#loginPassword").val();
-
-                    // Check if email and password match any user in localStorage
-                    var users = JSON.parse(localStorage.getItem("users")) || [];
-                    var loggedInUser = users.find(function (user) {
-                        return user.email === email && user.password === password;
-                    });
+                    var loggedInUser = users.find(user => user.email === email && user.password === password);
 
                     if (loggedInUser) {
                         isLoggedIn = true;
-                        updateUI(); // Update UI after successful login
-                        $("#loginModal").modal("hide"); // Hide the login modal
+                        updateUI();
+                        $("#loginModal").modal("hide");
                         alert("Login successful!");
                     } else {
                         alert("Invalid email or password. Please try again.");
                     }
                 });
 
-                // Logout button click handler
                 $("#logoutBtn").click(function () {
                     isLoggedIn = false;
-                    updateUI(); // Update UI after logout
+                    updateUI();
                     alert("Logout successful!");
                 });
 
-                // Function to handle adding products to the cart
                 function addToCart(productId) {
                     if (!isLoggedIn) {
                         alert("Please log in to add products to the cart.");
                         return;
                     }
-
-                    // Retrieve cart items from local storage
                     var cartItems = JSON.parse(localStorage.getItem("cart")) || [];
-
-                    // Check if the product is already in the cart
-                    var existingCartItem = cartItems.find(function (item) {
-                        return item.id === productId;
-                    });
+                    var existingCartItem = cartItems.find(item => item.id === productId);
 
                     if (existingCartItem) {
-                        // If the product is already in the cart, increment the quantity
                         existingCartItem.quantity++;
                     } else {
-                        // If the product is not in the cart, add it with a quantity of 1
                         cartItems.push({ id: productId, quantity: 1 });
                     }
-
-                    // Save the updated cart items back to local storage
                     localStorage.setItem("cart", JSON.stringify(cartItems));
-
                     alert("Product added to cart!");
-                    updateCartBadge(); // Update the cart badge in the UI
+                    updateCartBadge();
                 }
 
-                // Update the "Add to cart" button click event to call the addToCart function
-                $(".addToCartBtn").click(function (event) {
+                $(document).on("click", ".addToCartBtn", function (event) {
                     event.preventDefault();
                     var productId = $(this).data("product-id");
                     addToCart(productId);
                 });
 
-                // Cart button click handler
                 $(".cartBtn").click(function () {
-                    // Retrieve cart items from local storage
                     var cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+                    var cartModal = $("#cartModal");
+                    var cartModalBody = cartModal.find(".modal-body");
 
-                    // Check if the cart is empty
                     if (cartItems.length === 0) {
-                        alert("Your cart is empty. Please add some items before proceeding to checkout.");
-                        return;
-                    }
-
-                    // Display prompt with cart items, display the name and quantity of each item
-                    var cartMessage = cartItems.map(function (item) {
-                        var product = JSON.parse(localStorage.getItem("products")).find(function (product) {
-                            return product.id === item.id;
-                        });
-                        return `${product.type} x ${item.quantity}`;
-                    }).join("\n");
-
-                    // Display the cart items in a prompt
-                    var confirmation = confirm(`Cart items:\n${cartMessage}\n\nProceed to checkout?`);
-
-                    if (confirmation) {
-                        // compute the total amount
-                        var totalAmount = cartItems.reduce(function (total, item) {
-                            var product = JSON.parse(localStorage.getItem("products")).find(function (product) {
-                                return product.id === item.id;
-                            });
-                            return total + product.price * item.quantity;
-                        }, 0);
-
-                        // Display the total amount in a prompt
-                        var paymentConfirmation = confirm(`Total amount: ₱${totalAmount.toFixed(2)}\n\nProceed with payment?`);
-
-                        if (paymentConfirmation) {
-                            // ask for payment shipping address and contact number
-                            var shippingAddress = prompt("Enter shipping address:");
-                            var contactNumber = prompt("Enter contact number:");
-
-                            if (!shippingAddress || !contactNumber) {
-                                alert("Please enter a valid shipping address and contact number.");
-                                return;
-                            }
-
-                            // Display the payment confirmation
-                            alert(`Payment successful! Your order will be shipped to ${shippingAddress}. We will contact you at ${contactNumber} for confirmation.`);
-
-                            // save to order history
-                            var orderHistory = JSON.parse(localStorage.getItem("orderHistory")) || [];
-                            orderHistory.push({ items: cartItems, totalAmount: totalAmount, shippingAddress: shippingAddress, contactNumber: contactNumber });
-                            localStorage.setItem("orderHistory", JSON.stringify(orderHistory));
-
-                            // Clear the cart
-                            localStorage.removeItem("cart");
-                            updateCartBadge(); // Update the cart badge in the UI
-
-                        } else {
-                            alert("Payment cancelled.");
-                        }
+                        cartModalBody.html("<p>Your cart is empty.</p>");
+                        cartModal.find(".checkout").prop("disabled", true);
                     } else {
-                        alert("Payment cancelled.");
+                        cartModal.find(".checkout").prop("disabled", false);
+                        cartModalBody.empty();
+                        cartItems.forEach(function (item) {
+                            var products = JSON.parse(localStorage.getItem("products")) || [];
+                            var product = products.find(p => p.id === item.id);
+                            var cartItemHTML = `
+                                    <div class="d-flex justify-content-between mb-4">
+                                        <div class="d-flex">
+                                            <img src="${product.imageUrl}" alt="Placeholder" class="img-fluid rounded" style="width: 50px; height: 50px;" />
+                                            <div class="ms-3">
+                                                <h5>${product.brand}</h5>
+                                                <p class="mb-0">₱${product.price} x ${item.quantity}</p>
+                                            </div>
+                                        </div>
+                                        <div class="quantity-changer">
+                                            <button class="decrement-quantity btn btn-outline-secondary" data-product-id="${product.id}">
+                                                <i class="bi-dash"></i>
+                                            </button>
+                                            <span class="quantity">${item.quantity}</span>
+                                            <button class="increment-quantity btn btn-outline-secondary" data-product-id="${product.id}">
+                                                <i class="bi-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button class="removeFromCartBtn btn btn-outline-danger" data-product-id="${product.id}">
+                                                <i class="bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                `;
+                            cartModalBody.append(cartItemHTML);
+                        });
+                        cartModal.modal("show");
                     }
                 });
-                // Call updateUI function to initialize UI state
+
+                $(document).on("click", ".removeFromCartBtn", function () {
+                    var productId = $(this).data("product-id");
+                    var cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+                    cartItems = cartItems.filter(item => item.id !== productId);
+                    localStorage.setItem("cart", JSON.stringify(cartItems));
+                    updateCartBadge();
+                    $(this).closest(".d-flex").remove();
+                    $("#cartModal").modal("hide");
+                });
+
+                $(document).on("click", "#cartModal .btn-success", function () {
+                    var totalAmount = JSON.parse(localStorage.getItem("cart")).reduce((total, item) => {
+                        var product = JSON.parse(localStorage.getItem("products")).find(p => p.id === item.id);
+                        return total + (product.price * item.quantity);
+                    }, 0);
+                    var shippingAddress = prompt("Enter your shipping address:");
+                    var contactNumber = prompt("Enter your contact number:");
+
+                    if (shippingAddress && contactNumber) {
+                        alert(`Total amount: ₱${totalAmount.toFixed(2)}\nShipping Address: ${shippingAddress}\Contact Number: ${contactNumber}`);
+                    } else {
+                        alert("Please provide a valid shipping address and contact number.");
+                    }
+                    alert("Thank you for shopping with us! Your order has been placed.");
+
+                    var orderHistory = JSON.parse(localStorage.getItem("orderHistory")) || [];
+                    orderHistory.push({ cartItems: JSON.parse(localStorage.getItem("cart")), totalAmount: totalAmount, shippingAddress: shippingAddress, contactNumber: contactNumber });
+                    localStorage.setItem("orderHistory", JSON.stringify(orderHistory));
+                    localStorage.removeItem("cart");
+                    $(".cartBtn").click();
+                });
+
+                $(document).on("click", ".increment-quantity", function () {
+                    var productId = $(this).data("product-id");
+                    var cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+                    var cartItem = cartItems.find(item => item.id === productId);
+                    cartItem.quantity++;
+                    localStorage.setItem("cart", JSON.stringify(cartItems));
+                    $(".cartBtn").click();
+                    updateCartBadge();
+                });
+
+                $(document).on("click", ".decrement-quantity", function () {
+                    var productId = $(this).data("product-id");
+                    var cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+                    var cartItem = cartItems.find(item => item.id === productId);
+                    cartItem.quantity--;
+                    if (cartItem.quantity === 0) {
+                        cartItems = cartItems.filter(item => item.id !== productId);
+                    }
+                    localStorage.setItem("cart", JSON.stringify(cartItems));
+                    $(".cartBtn").click();
+                    updateCartBadge();
+                });
+
                 updateUI();
+                updateCartBadge();
             });
         </script>
 </body>

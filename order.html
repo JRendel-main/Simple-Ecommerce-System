@@ -241,7 +241,7 @@
             orders.forEach(function (order, index) {
                 // display items ordered
                 var itemsOrdered = "";
-                order.items.forEach(function (item) {
+                order.cartItems.forEach(function (item) {
                     itemsOrdered += `${item.id} x ${item.quantity}<br>`;
                 });
 
