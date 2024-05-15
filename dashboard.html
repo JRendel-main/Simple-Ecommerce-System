@@ -185,12 +185,14 @@
                 </div>
             </nav>
 
+
             <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
                     <h1 class="h2">Dashboard</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <button type="button" class="btn btn-outline-success" data-toggle="modal"
-                            data-target="#addProductModal">Add Product</button>
+                            data-target="#addProductModal">Add
+                            Product</button>
                     </div>
                 </div>
                 <div class="table-responsive text-center">
@@ -204,13 +206,32 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-
+                        <tbody id="productTableBody">
+                            <!-- Product cards will be dynamically inserted here -->
                         </tbody>
                     </table>
+                </div>
             </main>
+
         </div>
     </div>
+
+    <!-- Modal for displaying product details -->
+    <div class="modal fade" id="productDetailsModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Product Details</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="productDetailsBody">
+                    <!-- Product details will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Modal for adding product -->
     <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -390,25 +411,51 @@
                 $("#editProductModal").modal("show");
             });
 
+            $("tbody").on("click", ".btn-details", function () {
+                var productId = $(this).closest("tr").attr("data-id");
+                var products = JSON.parse(localStorage.getItem("products")) || [];
+                var product = products.find(function (product) {
+                    return product.id === productId;
+                });
+
+                // Generate product details HTML
+                var detailsHTML = "<p><strong>ID:</strong> " + product.id + "</p>" +
+                    "<p><strong>Type:</strong> " + product.type + "</p>" +
+                    "<p><strong>Brand Name:</strong> " + product.brand + "</p>" +
+                    "<p><strong>Price:</strong> ₱" + product.price + "</p>" +
+                    "<img src='" + product.imageUrl + "' alt='Product Image' style='max-width: 100%;'>";
+
+                // Insert product details into the modal body
+                $("#productDetailsBody").html(detailsHTML);
+
+                // Show the modal
+                $("#productDetailsModal").modal("show");
+            });
+
+            // Function to generate a product card dynamically
+            function generateProductCard(product) {
+                var card = "<tr data-id='" + product.id + "'>" +
+                    "<td>" + product.id + "</td>" +
+                    "<td>" + product.type + "</td>" +
+                    "<td>" + product.brand + "</td>" +
+                    "<td>" + "₱" + product.price + "</td>" +
+                    "<td>" +
+                    "<button class='btn btn-danger'>Delete</button> " +
+                    "<button class='btn btn-primary btn-edit'>Edit</button> " +
+                    "<button class='btn btn-info btn-details'>Details</button>" +
+                    "</td>" +
+                    "</tr>";
+                return card;
+            }
+
             // Function to load products from local storage and populate the table
             function loadProducts() {
                 var products = JSON.parse(localStorage.getItem("products")) || [];
-
-                var tbody = $("tbody");
+                var tbody = $("#productTableBody");
                 tbody.empty();
-
-                products.forEach(function (product, index) {
-                    var row = "<tr data-id='" + product.id + "'>" +
-                        "<td>" + product.id + "</td>" +
-                        "<td>" + product.type + "</td>" +
-                        "<td>" + product.brand + "</td>" +
-                        "<td>" + "₱" + product.price + "</td>" +
-                        "<td>" +
-                        "<button class='btn btn-danger'>Delete</button> " +
-                        "<button class='btn btn-primary btn-edit'>Edit</button>" +
-                        "</td>" +
-                        "</tr>";
-                    tbody.append(row);
+                products.forEach(function (product) {
+                    var card = generateProductCard(product);
+                    tbody.append(card);
                 });
             }
 

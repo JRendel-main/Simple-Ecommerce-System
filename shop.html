@@ -43,7 +43,8 @@
                 </ul>
                 <div class="d-flex">
                     <!-- login button -->
-                    <button class="btn btn-outline-dark me-2" data-bs-toggle="modal" data-bs-target="#loginModal">
+                    <button class="btn btn-outline-dark me-2" data-bs-toggle="modal" data-bs-target="#loginModal"
+                        id="loginBtn">
                         <i class="bi-box-arrow-in-right me-1"></i>
                         Login
                     </button>
@@ -54,9 +55,21 @@
                         Cart
                         <span class="badge bg-dark text-white">0</span>
                     </button>
-                    <button class="btn btn-outline-dark" id="logoutBtn" style="display: none;">
-                        Logout
-                    </button>
+                    <div class="dropdown" id="profile">
+                        <button class="btn btn-outline-dark dropdown-toggle" type="button" id="profileDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi-person me-1"></i>
+                            Profile
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                            <li><a class="dropdown-item" href="#!" id="profileBtn">Profile</a></li>
+                            <li>
+                                <hr class="dropdown-divider" />
+                            </li>
+                            <li><a class="dropdown-item" href="#!" id="logoutBtn">Logout</a></li>
+                        </ul>
+                    </div>
+
                 </div>
             </div>
     </nav>
@@ -82,6 +95,22 @@
             </div>
         </div>
     </section>
+
+    <!-- Modal for changing profile -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profileModalLabel">Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Profile details will be dynamically generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Modal for cart items -->
     <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
@@ -230,8 +259,51 @@
                     var cartBtn = $(".cartBtn");
                     cartBtn.toggle(isLoggedIn);
                     $("#loginBtn").toggle(!isLoggedIn);
-                    $("#logoutBtn").toggle(isLoggedIn);
+                    $("#profile").toggle(isLoggedIn);
                 }
+
+                $('#profileBtn').on('click', function () {
+                    var users = JSON.parse(localStorage.getItem("users")) || [];
+                    var email = $("#loginEmail").val();
+                    var loggedInUser = users.find(user => user.email === email);
+                    var profileModal = $("#profileModal");
+                    var profileModalBody = profileModal.find(".modal-body");
+
+                    if (loggedInUser) {
+                        // display editable profile details
+                        var profileHTML = `
+                            <div class="mb-3">
+                                <label for="profileFullName" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="profileFullName" value="${loggedInUser.fullName}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="profileEmail" class="form-label" disabled>Email address</label>
+                                <input type="email" class="form-control" id="profileEmail" value="${loggedInUser.email}" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="profilePassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="profilePassword" value="${loggedInUser.password}" required>
+                            </div>
+                            <button type="button" class="btn btn-success btn-block" id="updateProfileBtn">Update Profile</button>
+                        `;
+                        profileModalBody.html(profileHTML);
+                        profileModal.modal("show");
+                    }
+                });
+
+                $(document).on("click", "#updateProfileBtn", function () {
+                    var users = JSON.parse(localStorage.getItem("users")) || [];
+                    var email = $("#loginEmail").val();
+                    var loggedInUser = users.find(user => user.email === email);
+
+                    if (loggedInUser) {
+                        loggedInUser.fullName = $("#profileFullName").val();
+                        loggedInUser.password = $("#profilePassword").val();
+                        localStorage.setItem("users", JSON.stringify(users));
+                        alert("Profile updated successfully!");
+                        $("#profileModal").modal("hide");
+                    }
+                });
 
                 $("#registerForm").submit(function (event) {
                     event.preventDefault();
