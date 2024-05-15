@@ -238,6 +238,14 @@
             crossorigin="anonymous"></script>
         <!-- Core theme JS-->
         <script>
+            function deleteUser() {
+                var users = JSON.parse(localStorage.getItem("users")) || [];
+                var email = $("#loginEmail").val();
+                var filteredUsers = users.filter(user => user.email !== email);
+                localStorage.setItem("users", JSON.stringify(filteredUsers));
+                alert("User deleted successfully!");
+                location.reload(); // Reload the page after deleting the user
+            }
             // Function to generate a random placeholder image URL
             function getRandomImageURL() {
                 var imageWidth = 450;
@@ -324,9 +332,17 @@
                                 <input type="password" class="form-control" id="profilePassword" value="${loggedInUser.password}" required>
                             </div>
                             <button type="button" class="btn btn-success btn-block" id="updateProfileBtn">Update Profile</button>
+                            <button type="button" class="btn btn-danger" id="deleteUserBtn">Delete User</button>
                         `;
                         profileModalBody.html(profileHTML);
                         profileModal.modal("show");
+                    }
+                });
+
+                $(document).on("click", "#deleteUserBtn", function () {
+                    var confirmation = confirm("Are you sure you want to delete your account?");
+                    if (confirmation) {
+                        deleteUser();
                     }
                 });
 
